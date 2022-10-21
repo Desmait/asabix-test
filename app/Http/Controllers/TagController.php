@@ -6,6 +6,7 @@ use App\Interfaces\TagRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller
 {
@@ -23,6 +24,14 @@ class TagController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['data' => $validator->errors()->all()], Response::HTTP_BAD_REQUEST);
+        }
+
         $tagDetails = $request->only([
             'name'
         ]);
@@ -46,6 +55,14 @@ class TagController extends Controller
 
     public function update(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['data' => $validator->errors()->all()], Response::HTTP_BAD_REQUEST);
+        }
+
         $tagId = $request->route('id');
         $tagDetails = $request->only([
             'name'

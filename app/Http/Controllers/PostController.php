@@ -6,6 +6,7 @@ use App\Interfaces\PostRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -23,6 +24,16 @@ class PostController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+            'content' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['data' => $validator->errors()->all()], Response::HTTP_BAD_REQUEST);
+        }
+
         $postDetails = $request->only([
             'title',
             'description',
@@ -50,6 +61,16 @@ class PostController extends Controller
 
     public function update(Request $request): JsonResponse
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+            'content' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['data' => $validator->errors()->all()], Response::HTTP_BAD_REQUEST);
+        }
+
         $postId = $request->route('id');
         $postDetails = $request->only([
             'title',
