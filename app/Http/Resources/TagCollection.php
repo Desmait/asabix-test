@@ -8,6 +8,13 @@ use Illuminate\Support\Carbon;
 
 class TagCollection extends ResourceCollection
 {
+    protected $paginate = true;
+
+    public function paginate($value) {
+        $this->paginate = $value;
+        return $this;
+    }
+
     /**
      * Transform the resource collection into an array.
      *
@@ -26,8 +33,12 @@ class TagCollection extends ResourceCollection
             ];
         }
 
-        $page = $request->page ?? 1;
-        $perPage = $request->perPage ?? 10;
-        return PaginationController::paginate($response, $perPage, $page);
+        if ($this->paginate) {
+            $page = $request->page ?? 1;
+            $perPage = $request->perPage ?? 10;
+            return PaginationController::paginate($response, $perPage, $page);
+        } else {
+            return $response;
+        }
     }
 }

@@ -23,7 +23,7 @@ class PostCollection extends ResourceCollection
                 'title' => $item->postTranslation->title,
                 'description' => $item->postTranslation->description,
                 'content' => $item->postTranslation->content,
-                'tags' => new TagCollection($item->tags),
+                'tags' => (new TagCollection($item->tags))->paginate(false),
                 'created_at' => Carbon::parse($item->created_at)->format('d-m-Y h:m:s'),
                 'updated_at' => Carbon::parse($item->updated_at)->format('d-m-Y h:m:s')
             ];
